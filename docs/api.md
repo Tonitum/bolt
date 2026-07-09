@@ -19,7 +19,8 @@ Example payload
 ```json
 {
   "url": "string",
-  "user": {
+  "alias": "string", // optional
+  "user": { // optional
     "id": "string" 
     },
 }
