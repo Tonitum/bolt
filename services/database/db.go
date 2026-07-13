@@ -3,12 +3,8 @@ package database
 import (
 	"database/sql"
 	"fmt"
-
 	_ "modernc.org/sqlite"
 )
-
-// TODO: implement a real database interface
-// store in memory for now
 
 var conn *sql.DB
 
@@ -58,24 +54,35 @@ func GetURL(id string) string {
 	return resulturl
 }
 
-// TODO: return a struct not just a string? that's kinda OOP
+// TODO: return a struct? not just a string? that's kinda OOP
+// TODO: we should conditionally upsert, but that will require some user PutID
+// also, maybe another flag in the incoming request to overwrite existing?
+// also, maybe store a database column to indicate team/group?
 func PutID(id string, url string) (bool, error) {
-	// how do I type with multiple returns?
-	// I want to return nil if the provided id doesn't exist
-	stmt, err := conn.Prepare("INSERT INTO aliases (alias,url) VALUES (?,?)")
+	// we want to do an upsert
+	// if the record exists, update
+	// if it does not, insert
+	var command = `INSERT INTO aliases (alias, url) 
+	VALUES(?,?)
+	ON CONFLICT(alias)
+	DO
+		UPDATE SET url = ?
+		WHERE alias = ?
+	`
+	stmt, err := conn.Prepare(command)
 	if err != nil {
-		fmt.Println("Failed to prepare statement")
+		fmt.Println("Failed to prepare upsert statement")
 		fmt.Printf("err: %v\n", err)
-		var retErr error
-		return false, retErr
+		return false, err
 	}
-	_, err = stmt.Exec(id, url)
+	res, err := stmt.Exec(id, url, url, id)
 	if err != nil {
-		fmt.Println("Failed to prepare statement")
+		fmt.Println("Failed to execute upsert statement")
 		fmt.Printf("err: %v\n", err)
-		var retErr error
-		return false, retErr
+		return false, err
 	}
+	fmt.Println(res.RowsAffected())
+
 	return true, nil
 }
 
