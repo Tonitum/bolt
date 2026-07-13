@@ -20,6 +20,7 @@ type User struct {
 
 type IDRequest struct {
 	Url  string `json:"url"`
+	Alias   string `json:"alias"` // make optional
 	User *User
 }
 
@@ -27,7 +28,7 @@ type IDResponse struct {
 	ShortURL string `json:"short_url"`
 }
 
-func NewID(w http.ResponseWriter, req *http.Request) {
+func RegisterEntry(w http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 	// authenticate the request TODO
 
@@ -40,18 +41,28 @@ func NewID(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "bad request", http.StatusBadRequest)
 		return
 	}
+
 	fmt.Printf("received request for url %v\n", idrequest.Url)
+	// check if the body included a short URL id
+	var shortID string
+	var reqID = idrequest.Alias
 	// create the shortened url
-	shortURL := getShortID()
+	if reqID == "" {
+		shortID = getShortID()
+	} else {
+		shortID = reqID
+	}
 
 	// save the short URL to the database as shortURL:longURL
-	ids[shortURL] = idrequest.Url
+	if (idrequest.Url == "") {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	database.PutID(shortID, idrequest.Url)
 
 	// return the payload
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	response := IDResponse{shortURL}
+	response := IDResponse{shortID}
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -80,5 +91,6 @@ func LoadURL(w http.ResponseWriter, req *http.Request) {
 	// get the short id from the loaded url
 	// get the url from the stored id map
 	// redirect the request to the long url
-	http.Redirect(w,req,fullURL,http.StatusFound)
+	http.Redirect(w, req, fullURL, http.StatusFound)
 }
+

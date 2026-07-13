@@ -40,17 +40,27 @@ Accepted Method(s): GET, POST (future, for user updates), DELETE (future, for us
 
 If the short url exists, redirects the client to the long url
 
+### /list
+
+lists out all of the registered URLs, assuming the user is authenticated
+Future: row level auth for each entry
+
 ## Auth (future)
 
 ### /login
 
 POST
+On success, returns a JWT
 
 ### /logout
 
 POST
+Invalidate JWT
 
 ### /auth
 
 POST
+Checks status on JWT
+- if good, return 200
+- if not, redirect to login
 
