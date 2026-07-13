@@ -21,3 +21,27 @@ hash service
   revisit
 
 
+```mermaid
+flowchart LR
+  user(User)
+  main[Main Service]
+  auth[Authentication Service]
+  db[Database Service]
+  dbProvider1[(PostgreSQL)]
+  dbProvider2[(sqlite)]
+  dbProvider3[(MySQL)]
+  authProvider1[Github]
+  authProvider2[Azure Entra]
+  authProvider3[Any OAuth2 Provider]
+  user --> main
+  main --> db
+  main --> auth
+  db --> auth
+  db -.- dbProvider1
+  db -.- dbProvider2
+  db -.- dbProvider3
+  auth -.- authProvider1
+  auth -.- authProvider2
+  auth -.- authProvider3
+
+```
