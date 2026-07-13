@@ -94,3 +94,11 @@ func LoadURL(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, fullURL, http.StatusFound)
 }
 
+func ListURLS(w http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
+
+	// return the payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(database.Dump())
+}
