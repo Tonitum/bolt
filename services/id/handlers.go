@@ -19,9 +19,9 @@ type User struct {
 }
 
 type IDRequest struct {
-	Url  string `json:"url"`
-	Alias   string `json:"alias"` // make optional
-	User *User
+	Url   string `json:"url"`
+	Alias string `json:"alias"` // make optional
+	User  *User
 }
 
 type IDResponse struct {
@@ -54,7 +54,7 @@ func RegisterEntry(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// save the short URL to the database as shortURL:longURL
-	if (idrequest.Url == "") {
+	if idrequest.Url == "" {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 	database.PutID(shortID, idrequest.Url)
