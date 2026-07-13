@@ -1,6 +1,7 @@
 package id
 
 import (
+	"bolt/services/database"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
@@ -12,8 +13,6 @@ import (
 )
 
 var count atomic.Int64
-
-var ids map[string]string = map[string]string{}
 
 type User struct {
 	Id string `json:"id"`
@@ -47,6 +46,7 @@ func NewID(w http.ResponseWriter, req *http.Request) {
 
 	// save the short URL to the database as shortURL:longURL
 	ids[shortURL] = idrequest.Url
+	database.PutID(shortID, idrequest.Url)
 
 	// return the payload
 	w.Header().Set("Content-Type", "application/json")
@@ -74,8 +74,7 @@ func getShortID() string {
 func LoadURL(w http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 	// authenticate the request TODO
-	// TODO: This will always break if we get an ask for an ID that doesn't exist
-	var fullURL string = ids[strings.Split(req.URL.Path, "/")[1]]
+	var fullURL string = database.GetURL(strings.Split(req.URL.Path, "/")[1])
 	println("redirecting to " + fullURL)
 
 	// get the short id from the loaded url
