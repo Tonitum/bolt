@@ -1,4 +1,4 @@
-package id
+package core
 
 import (
 	"bolt/services/database"
@@ -57,7 +57,7 @@ func RegisterEntry(w http.ResponseWriter, req *http.Request) {
 	if idrequest.Url == "" {
 		w.WriteHeader(http.StatusBadRequest)
 	}
-	database.PutID(shortID, idrequest.Url)
+	database.DB.PutAlias(shortID, idrequest.Url)
 
 	// return the payload
 	w.Header().Set("Content-Type", "application/json")
@@ -85,7 +85,12 @@ func getShortID() string {
 func LoadURL(w http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 	// authenticate the request TODO
-	var fullURL string = database.GetURL(strings.Split(req.URL.Path, "/")[1])
+	fullURL, err := database.DB.GetURL(strings.Split(req.URL.Path, "/")[1])
+	if (err != nil){
+		// TODO: this is only one of the possible error cases
+		http.Error(w, "alias does not exist", http.StatusNotFound)
+		return
+	}
 	println("redirecting to " + fullURL)
 
 	// get the short id from the loaded url
@@ -100,5 +105,10 @@ func ListURLS(w http.ResponseWriter, req *http.Request) {
 	// return the payload
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(database.Dump())
+	results, err := database.DB.ListAliases()
+	if (err != nil){
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(results)
 }
