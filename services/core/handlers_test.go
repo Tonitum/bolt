@@ -42,7 +42,7 @@ func TestRegisterEntry(t *testing.T) {
 	database.DB = &MockDB{}
 	database.DB.Init()
 	var alias = "foo"
-	var body = IDRequest{"https://www.tonitum.com/", alias, nil}
+	var body = AliasRequest{"https://www.tonitum.com/", alias, nil}
 	var bodyJson, _ = json.Marshal(body)
 
 	r := httptest.NewRequest("GET", "/new", strings.NewReader(string(bodyJson)))
@@ -62,7 +62,7 @@ func TestRegisterEntry(t *testing.T) {
 		t.Errorf("Entry not persisted to database")
 	}
 
-	var idresponse IDResponse
+	var idresponse AliasResponse
 
 	resErr := json.NewDecoder(res.Body).Decode(&idresponse)
 
@@ -73,13 +73,12 @@ func TestRegisterEntry(t *testing.T) {
 	if idresponse.ShortURL != alias {
 		t.Error("Alias was not preserved")
 	}
-
 }
 
 func TestRegisterEntryNoAlias(t *testing.T) {
 	database.DB = &MockDB{}
 	database.DB.Init()
-	var body = IDRequest{"https://www.tonitum.com/", "", nil}
+	var body = AliasRequest{"https://www.tonitum.com/", "", nil}
 	var bodyJson, _ = json.Marshal(body)
 
 	r := httptest.NewRequest("GET", "/new", strings.NewReader(string(bodyJson)))
@@ -92,7 +91,7 @@ func TestRegisterEntryNoAlias(t *testing.T) {
 	if res.StatusCode != 200 {
 		t.Errorf("Non 200 status code: %d", res.StatusCode)
 	}
-	var idresponse IDResponse
+	var idresponse AliasResponse
 
 	resErr := json.NewDecoder(res.Body).Decode(&idresponse)
 
@@ -109,7 +108,7 @@ func TestRegisterEntryNoAlias(t *testing.T) {
 }
 
 func TestRegisterEntryNoURL(t *testing.T) {
-	var body = IDRequest{"", "foo", nil}
+	var body = AliasRequest{"", "foo", nil}
 	var bodyJson, _ = json.Marshal(body)
 
 	r := httptest.NewRequest("GET", "/new", strings.NewReader(string(bodyJson)))

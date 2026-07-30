@@ -106,6 +106,19 @@ func (db SQLITE) PutAlias(alias string, url string) (bool, error) {
 }
 
 func (db *SQLITE) DeleteAlias(alias string) (bool, error) {
+	var command = `DELETE FROM aliases WHERE alias = ?`
+	stmt, err := db.conn.Prepare(command)
+	if err != nil {
+		fmt.Println("Failed to prepare delete statement")
+		fmt.Printf("err: %v\n", err)
+		return false, err
+	}
+	_, err = stmt.Exec(alias)
+	if err != nil {
+		fmt.Println("Failed to execute delete statement")
+		fmt.Printf("err: %v\n", err)
+		return false, err
+	}
 	return true, nil
 }
 
