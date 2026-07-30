@@ -1,0 +1,15 @@
+image:
+  repository: bolt
+  tag: latest
+  pullPolicy: IfNotPresent
+
+persistence:
+  storageClass: ""
+  size: 1Gi
+
+gateway:
+  name: gateway
+  namespace: ""
+  sectionName: http
+
+hostnames: []
