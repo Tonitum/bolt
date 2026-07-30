@@ -1,7 +1,7 @@
 package core
 
 import (
-	"bolt/services/database"
+	"bolt/internal/database"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"

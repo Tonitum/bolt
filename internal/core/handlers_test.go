@@ -1,7 +1,7 @@
 package core
 
 import (
-	"bolt/services/database"
+	"bolt/internal/database"
 	"encoding/json"
 	"fmt"
 	"net/http"
