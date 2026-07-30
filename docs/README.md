@@ -1,26 +1,57 @@
 # bolt
 
-bolt.tonitum is a self-hosted solution for fast access to team specific URLs.
+## Local Kubernetes
 
-Instead of sharing a bunch of links to all of the members of the team, teams
-can instead deploy and configure `bolt` to provide short aliases to all of your
-important websites.
+Requirements: Docker, `kind`, `kubectl`, and Helm.
 
-Examples:
-- bolt.tonitum/docs : developer documentation
-- bolt.tonitum/tests : test suite and reports
-- bolt.tonitum/dashboard : observability and metrics dashboard (ex. grafana
-- bolt.tonitum/files : share drive for files (ex. onedrive link)
-- bolt.tonitum/notes : meeting notes (ex. confluence section)
+```sh
+brew install kind kubectl helm
+kind create cluster --name bolt
+```
 
-### FAQ
-Q: Why not use bookmarks?
-A: Bookmarks are great but 1. it's not straightforward or common to share
-bookmarks across a team and 2. if a site changes, everyone's bookmarks are out
-of date. 3. still use bookmarks, but bookmark the alias instead of the long
-URL! Additionally, if makes sharing all of the documentation at once easy.
+Build and load the application image:
 
-Team a: team-a.bolt/docs
-Team b: team-b.bolt/docs
+```sh
+docker build -t bolt:dev .
+kind load docker-image bolt:dev --name bolt
+```
 
+Install Envoy Gateway and Gateway API resources:
 
+```sh
+scripts/install-envoy-gateway.sh
+helm upgrade --install test-infra charts/test-infra
+```
+
+Install Bolt:
+
+```sh
+helm upgrade --install bolt charts/bolt \
+  --set image.repository=bolt \
+  --set image.tag=dev \
+  --set image.pullPolicy=IfNotPresent
+```
+
+Check the resources:
+
+```sh
+kubectl get pods,pvc,gateway,httproute
+kubectl describe httproute bolt-bolt
+```
+
+Forward the Gateway service:
+
+```sh
+export ENVOY_SERVICE=$(kubectl get service \
+  --namespace envoy-gateway-system \
+  --selector=gateway.envoyproxy.io/owning-gateway-namespace=default,gateway.envoyproxy.io/owning-gateway-name=gateway \
+  --output=jsonpath='{.items[0].metadata.name}')
+
+kubectl port-forward --namespace envoy-gateway-system service/$ENVOY_SERVICE 8080:80
+```
+
+Test the route:
+
+```sh
+curl http://localhost:8080/list
+```

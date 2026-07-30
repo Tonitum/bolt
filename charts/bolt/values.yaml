@@ -8,6 +8,7 @@ persistence:
   size: 1Gi
 
 gateway:
+  enabled: false
   name: gateway
   namespace: ""
   sectionName: http
