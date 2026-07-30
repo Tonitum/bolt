@@ -1,0 +1,14 @@
+.git
+.DS_Store
+*.db
+db/
+bin/
+dist/
+tmp/
+*.exe
+*.test
+coverage.out
+docs/
+scripts/
+AGENTS.md
+TODO.md
