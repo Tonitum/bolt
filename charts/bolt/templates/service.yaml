@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "bolt.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   selector:
     app.kubernetes.io/name: {{ include "bolt.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -13,3 +13,6 @@ spec:
     - name: http
       port: 80
       targetPort: http
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}

@@ -3,6 +3,10 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+service:
+  type: ClusterIP
+  nodePort: null
+
 persistence:
   storageClass: ""
   size: 1Gi
