@@ -1,0 +1,22 @@
+services:
+  bolt:
+    build: .
+    image: bolt:latest
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - bolt-data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      BOLT_HOST: ${BOLT_HOST:-blt.tailb538a8.ts.net}
+    ports:
+      - "127.0.0.1:8081:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    restart: unless-stopped
+
+volumes:
+  bolt-data:

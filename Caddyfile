@@ -1,0 +1,3 @@
+http://:80 {
+	redir https://{$BOLT_HOST}{uri} permanent
+}

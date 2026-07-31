@@ -1,5 +1,7 @@
 # bolt
 
+See [homelab deployment](docs/homelab.md) for Docker Compose and Tailscale setup.
+
 ## Local Kubernetes
 
 Requirements: Docker, `kind`, `kubectl`, and Helm.
