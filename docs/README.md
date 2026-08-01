@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 # bolt
 
 See [homelab deployment](docs/homelab.md) for Docker Compose and Tailscale setup.
