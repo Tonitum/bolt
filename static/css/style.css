@@ -1,0 +1,124 @@
+body {
+    background-color: #111111;
+    background-position: center;
+    color: whitesmoke;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 3rem;
+}
+
+.quicklinks {
+    border: none;
+    border-collapse: collapse;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: whitesmoke;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quicklink-entry {
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 5px;
+}
+
+.quicklink-entry>a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.quicklink-entry:hover {
+    background-color: rgba(255, 255, 255, .1);
+    z-index: -1;
+}
+
+.logo {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1000;
+    opacity: 0.3;
+    mask-image: radial-gradient(circle, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);
+}
+
+.about {
+    margin: auto;
+    width: 40%;
+}
+
+.project-header {
+    /* border-bottom: 1px solid white; */
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 0px;
+}
+
+.project-list {
+    border-spacing: 0 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.project-entry {
+    border-bottom: 1px solid white;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.project-title {
+    color: whitesmoke;
+}
+
+.project-title>a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.project-description {
+    padding-bottom: 10px;
+    text-align: left;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.project-link {
+    color: whitesmoke;
+}
+
+.project-link>a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.spacer {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-top: 1px solid white;
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#aliases {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 auto;
+    width: max-content;
+}
+
+#aliases a {
+    color: whitesmoke;
+    text-decoration: underline;
+}

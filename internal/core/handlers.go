@@ -96,6 +96,22 @@ func LoadEntry(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, fullURL, http.StatusFound)
 }
 
+func DeleteEntry(w http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
+	// authenticate the request TODO
+
+	ok, err := database.DB.DeleteAlias(strings.Split(req.URL.Path, "/")[1])
+	if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+	if !ok {
+		http.Error(w, "alias does not exist", http.StatusNotFound)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func ListURLS(w http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 

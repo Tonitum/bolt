@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="icon" href="./images/favicon.png">
+  <title>Bolt</title>
+</head>
+<body>
+  <div class="logo">
+    <img src="./images/logo.webp">
+  </div>
+  <form id="new-alias">
+    <label>
+      Alias
+      <input id="alias" name="alias" type="text" autocomplete="off" required>
+    </label>
+    <label>
+      URL
+      <input id="url" name="url" type="url" required>
+    </label>
+    <button type="submit">Add alias</button>
+  </form>
+
+  <form id="delete-alias">
+    <label>
+      Alias
+      <input id="delete-alias-input" name="alias" type="text" autocomplete="off" required>
+    </label>
+    <button type="submit">Delete alias</button>
+  </form>
+
+  <button id="list-aliases" type="button">List aliases</button>
+  <p id="status" aria-live="polite"></p>
+  <ul id="aliases"></ul>
+
+  <script src="/app.js"></script>
+</body>
+</html>

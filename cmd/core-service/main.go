@@ -9,6 +9,8 @@ import (
 
 func main() {
 	database.InitDB()
+	http.Handle("GET /", http.FileServer(http.Dir("/static")))
+	http.Handle("GET /app.js", http.FileServer(http.Dir("/static")))
 	http.HandleFunc("POST /new", core.RegisterEntry)
 	http.HandleFunc("GET /{alias}", core.LoadEntry)
 	http.HandleFunc("GET /list", core.ListURLS)

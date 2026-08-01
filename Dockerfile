@@ -13,6 +13,7 @@ FROM alpine:3.22
 WORKDIR /data
 
 COPY --from=build /bolt /usr/local/bin/bolt
+COPY --from=build /src/static /static
 
 VOLUME ["/data"]
 EXPOSE 80
